@@ -1,0 +1,16 @@
+:root {
+    /* Student Specific Colors (Cosmic) */
+    --gradient-start: #8b5cf6;
+    --gradient-mid: #a78bfa;
+    --gradient-end: #ec4899;
+    --purple-light: #f3e8ff;
+    --navy-dark: #1e293b;
+    --navy-darker: #0f172a;
+    --yellow-accent: #fbbf24;
+
+    /* Theme Overrides */
+    --primary: #3b82f6;
+    --primary-light: #60a5fa;
+    --primary-dark: #2563eb;
+    --bg-light: #f8fafc;
+}

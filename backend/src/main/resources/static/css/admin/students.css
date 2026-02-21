@@ -1,0 +1,56 @@
+/* Student List Refinements */
+#studentsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+#studentsGrid .course-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    margin: 0;
+    justify-content: space-between;
+}
+
+#studentsGrid .course-card:hover {
+    background: #f8fafc;
+    transform: none;
+}
+
+#studentsGrid .course-card img {
+    display: none;
+}
+
+#studentsGrid .course-card .info {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+}
+
+#studentsGrid .course-card h4 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    min-width: 150px;
+}
+
+#studentsGrid .course-card p {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+#studentsGrid .course-card small {
+    color: var(--text-muted);
+    font-size: 13px;
+}

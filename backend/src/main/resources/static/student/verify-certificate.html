@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Verification - skilledUp</title>
+    <link rel="stylesheet" href="../css/student.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Embed critical verification styles here for now to ensure isolation, then move to css file */
+        body.verify-page {
+            background-color: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .verify-header {
+            padding: 20px 40px;
+            background: white;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .verify-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1e293b;
+            font-size: 24px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .verify-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Left Column */
+        .cert-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            background: #eef2ff;
+            color: #4f46e5;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            width: fit-content;
+        }
+
+        .cert-description {
+            color: #64748b;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .cert-description strong {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        /* Certificate Preview Area - Black/Gold Container */
+        .certificate-preview-container {
+            width: 100%;
+            max-width: 800px;
+            /* Constrain width directly to maintain reasonable size */
+            background: #1e293b;
+            /* Dark navy background */
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            /* Standard A4 Aspect Ratio */
+            aspect-ratio: 1.414 / 1;
+            /* Remove max-height to ensure width/height ratio stays locked */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .certificate-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Footer inside Left Col */
+        .cert-footer-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            /* Square with radius as in ref */
+            object-fit: cover;
+        }
+
+        .user-details h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #64748b;
+            margin: 0 0 4px 0;
+        }
+
+        .user-details h3 strong {
+            color: #1e293b;
+        }
+
+        .user-rating {
+            color: #f59e0b;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .share-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .share-text {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .share-icons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .share-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .fb {
+            background: #3b5998;
+        }
+
+        .tw {
+            background: #1da1f2;
+        }
+
+        .wa {
+            background: #25d366;
+        }
+
+        .ln {
+            background: #0077b5;
+        }
+
+        /* Right Column - Explore Card */
+        .explore-card {
+            background: #0f172a;
+            /* Darker navy/black background matching reference */
+            border-radius: 12px;
+            padding: 32px;
+            color: white;
+            height: fit-content;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 140px;
+            /* Offset from top as requested */
+        }
+
+        .explore-card h3 {
+            font-size: 19px;
+            font-weight: 800;
+            margin: 0 0 16px 0;
+            line-height: 1.4;
+            color: white;
+        }
+
+        .explore-subtitle {
+            font-size: 14px;
+            color: #bdc3c7;
+            /* Lighter gray for subtitle */
+            margin-bottom: 24px;
+            display: block;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .course-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .explore-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            font-size: 13.5px;
+            transition: all 0.2s;
+        }
+
+        .explore-item:hover {
+            transform: translateX(4px);
+            color: #60a5fa;
+            /* Light blue on hover */
+        }
+
+        /* Circular Icon Styling */
+        .explore-icon {
+            width: 24px;
+            height: 24px;
+            background: #eab308;
+            /* Vivid yellow-orange */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #0f172a;
+            /* Dark icon color */
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(234, 179, 8, 0.3);
+        }
+
+        .more-link {
+            display: block;
+            margin-top: 24px;
+            color: #eab308;
+            /* Match icon color */
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .more-link:hover {
+            text-decoration: underline;
+        }
+
+        .boost-text {
+            margin-top: 24px;
+            font-size: 13px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Button Styling Match */
+        .btn-explore {
+            display: block;
+            width: 100%;
+            background: #2563eb;
+            /* Strong primary blue */
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 6px;
+            /* Slightly sharper radius */
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background 0.2s, transform 0.2s;
+            border: none;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-explore:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+
+        @media (max-width: 1024px) {
+            .verify-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="../css/student/responsive.css">
+</head>
+
+<body class="verify-page">
+
+    <!-- Header -->
+    <header class="verify-header">
+        <a href="home.html" class="verify-logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>skilledUp</span>
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <div class="verify-container">
+
+        <!-- Left: Certificate -->
+        <main class="cert-section">
+            <div class="badge-pill">Course Certificate</div>
+
+            <p class="cert-description">
+                This certificate is awarded to <strong id="studentName">Student Name</strong> in recognition of the
+                successful completion of the <strong id="courseName">Course Name</strong> course, showcasing dedication,
+                expertise, and excellence.
+            </p>
+
+            <!-- Certificate Preview -->
+            <div class="certificate-preview-container">
+                <!-- Certificate Preview Iframe Container -->
+                <div id="certContainer"
+                    style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:white;">
+                    Loading Certificate...
+                </div>
+            </div>
+
+            <!-- Footer Card -->
+            <div class="cert-footer-card">
+                <div class="user-info">
+                    <div style="width: 48px; height: 48px; background: #3b82f6; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px;"
+                        id="userInitials">
+                        ST
+                    </div>
+                    <div class="user-details" style="margin-left: 12px;">
+                        <h3 style="font-size: 15px; color: #1e293b; margin: 0;">Course completed by <strong
+                                id="footerName">Student Name</strong></h3>
+                        <div style="font-size: 13px; color: #d97706; margin-top: 2px;">
+                            Explore Courses for Beginners R3 0
+                        </div>
+                        <a href="home.html"
+                            style="color:#3b82f6; font-size:12px; font-weight:700; text-decoration:none; margin-top:2px; display:inline-block;">START
+                            LEARNING FOR FREE</a>
+                    </div>
+                </div>
+
+                <div class="share-actions" style="align-items: center; flex-direction: row; gap: 16px;">
+                    <button onclick="downloadCurrentCertificate()" style="
+                        background: #3b82f6;
+                        color: white;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 6px;
+                        font-weight: 600;
+                        font-size: 14px;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    ">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <div class="share-icons">
+                        <button onclick="shareCertificate('facebook')" class="share-btn fb"
+                            style="border:none; cursor:pointer;"><i class="fab fa-facebook-f"></i></button>
+                        <button onclick="shareCertificate('twitter')" class="share-btn tw"
+                            style="border:none; cursor:pointer;"><i class="fab fa-twitter"></i></button>
+                        <button onclick="shareCertificate('whatsapp')" class="share-btn wa"
+                            style="border:none; cursor:pointer;"><i class="fab fa-whatsapp"></i></button>
+                        <button onclick="shareCertificate('linkedin')" class="share-btn ln"
+                            style="border:none; cursor:pointer;"><i class="fab fa-linkedin-in"></i></button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right: Explore Sidebar -->
+        <aside class="explore-column">
+            <div class="explore-card">
+                <h3>Explore Our Most In-Demand Courses</h3>
+                <span class="explore-subtitle">Unlock new opportunities with our top courses:</span>
+
+                <div class="course-list">
+                    <a href="#" class="explore-item">
+                        <div class="explore-icon"><i class="fas fa-chevron-right"></i></div>
+                        Data Science with Generative AI
+                    </a>
+                    <a href="#" class="explore-item">
+                        <div class="explore-icon"><i class="fas fa-chevron-right"></i></div>
+                        Data Analytics with ML
+                    </a>
+                    <a href="#" class="explore-item">
+                        <div class="explore-icon"><i class="fas fa-chevron-right"></i></div>
+                        Data Analytics
+                    </a>
+                </div>
+
+                <a href="home.html" class="more-link">...and many more!</a>
+
+                <div class="boost-text">
+                    <i class="fas fa-rocket" style="color:#f59e0b"></i>
+                    Boost Your Skills. Advance Your Career.
+                </div>
+
+                <a href="home.html" class="btn-explore">EXPLORE OUR COURSES TODAY!</a>
+            </div>
+        </aside>
+
+    </div>
+
+    <script src="../js/shared.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', async () => {
+            const params = new URLSearchParams(window.location.search);
+            const name = params.get('name') || 'Student Name';
+            const courseTitle = params.get('course') || 'Course Name';
+            const courseId = params.get('courseId');
+
+            // Populate text
+            document.getElementById('studentName').innerText = name;
+            document.getElementById('footerName').innerText = name;
+            document.getElementById('courseName').innerText = courseTitle;
+
+            // Set Initials
+            if (name) {
+                const initials = name.split(' ').map(n => n[0]).filter(c => c).join('').substring(0, 2).toUpperCase();
+                const initEl = document.getElementById('userInitials');
+                if (initEl) initEl.innerText = initials;
+            }
+
+            // Update Avatar (Fallback if initials distinct style not preferred, but we used initials div)
+            // document.getElementById('userAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&size=128`;
+
+            // Load Certificate
+            if (courseId) {
+                const container = document.getElementById('certContainer');
+                try {
+
+                    // Fetch certificate blob with auth
+                    const res = await fetchWithAuth(`/certificates/download/${courseId}`);
+
+                    if (res.ok) {
+                        const blob = await res.blob();
+                        const url = window.URL.createObjectURL(blob);
+
+                        // Store blob URL for download button
+                        window.certificateBlobUrl = url;
+                        window.certificateFileName = `${courseTitle.replace(/[^a-zA-Z0-9]/g, '_')}_Certificate.pdf`;
+
+                        // Use iframe to display PDF with toolbar disabled
+                        // #toolbar=0 hides the toolbar
+                        container.innerHTML = `
+                            <iframe src="${url}#toolbar=0&navpanes=0&view=FitH" style="width:100%; height:100%; border:none; border-radius:8px;" 
+                                title="Certificate Preview">
+                            </iframe>
+                        `;
+                    } else {
+                        container.innerHTML = '<div style="color:#ef4444; text-align:center;">Failed to load certificate.<br>Please try again later.</div>';
+                        console.error('Certificate fetch failed', res.status);
+                    }
+                } catch (e) {
+                    console.error(e);
+                    container.innerHTML = '<div style="color:#ef4444">Error loading certificate.</div>';
+                }
+            } else {
+                document.getElementById('certContainer').innerHTML = 'No course ID provided.';
+            }
+        });
+
+        function downloadCurrentCertificate() {
+            if (window.certificateBlobUrl) {
+                const a = document.createElement('a');
+                a.href = window.certificateBlobUrl;
+                a.download = window.certificateFileName || 'Certificate.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } else {
+                alert('Certificate not ready to download yet.');
+            }
+        }
+
+        function shareCertificate(platform) {
+            const url = encodeURIComponent(window.location.href);
+            // Default text, can be dynamic
+            const text = encodeURIComponent("Check out my certificate from SkilledUp!");
+
+            let shareUrl = '';
+            switch (platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+                    break;
+                case 'whatsapp':
+                    shareUrl = `https://api.whatsapp.com/send?text=${text}%20${url}`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                    break;
+            }
+
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400');
+            }
+        }
+    </script>
+</body>
+
+</html>

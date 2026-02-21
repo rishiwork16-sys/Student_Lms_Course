@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Course - Admin</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <i class="fas fa-graduation-cap"></i>
+                <span>skilledUp</span>
+            </div>
+            <button class="nav-toggle" id="adminNavToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <ul class="sidebar-menu">
+            <li onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Dashboard</span>
+            </li>
+            <li class="active">
+                <i class="fas fa-book"></i>
+                <span>Manage Course</span>
+            </li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1 id="courseTitleHeader">Loading...</h1>
+                <p>Manage modules, videos, and assignments</p>
+            </div>
+            <div class="header-right">
+                <button class="btn-icon" onclick="editCourse()" title="Edit Course">
+                    <i class="fas fa-edit"></i> Edit Course
+                </button>
+                <button class="btn-icon" onclick="toggleCourseStatus()" title="Toggle Status">
+                    <i class="fas fa-toggle-on"></i> Toggle Status
+                </button>
+                <button class="btn-icon btn-delete" onclick="deleteCourseConfirm()" title="Delete Course">
+                    <i class="fas fa-trash"></i> Delete Course
+                </button>
+                <button class="btn-new-course" onclick="openAddModuleModal()">
+                    <i class="fas fa-plus"></i> Add Module
+                </button>
+            </div>
+        </header>
+
+        <section class="content-manager">
+            <div class="modules-container" id="modulesContainer">
+                <!-- Modules & Videos loaded here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Video Player Modal -->
+    <div id="videoPlayerModal" class="modal">
+        <div class="modal-content video-player-modal">
+            <span class="close" onclick="closeVideoPlayer()">&times;</span>
+            <h3 id="playerVideoTitle">Video Title</h3>
+            <video id="adminVideoPlayer" width="100%" style="max-height: 420px; background: #000;"></video>
+            <div class="controls-bar">
+                <div class="controls-left">
+                    <button id="adminPlayBtn"><i class="fas fa-play"></i></button>
+                    <button id="adminMuteBtn"><i class="fas fa-volume-up"></i></button>
+                    <input type="range" id="adminVolumeRange" min="0" max="1" step="0.05" value="1">
+                    <span id="adminTimeLabel">00:00 / 00:00</span>
+                </div>
+                <div class="controls-right">
+                    <label>Speed</label>
+                    <select id="adminSpeedSelect">
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2x</option>
+                    </select>
+                    <button id="adminPipBtn"><i class="fas fa-window-restore"></i></button>
+                    <button id="adminFsBtn"><i class="fas fa-expand"></i></button>
+                    <button id="adminTheaterBtn"><i class="fas fa-tv"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Course Modal -->
+    <div id="editCourseModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editCourseModal')">&times;</span>
+            <h3>Edit Course</h3>
+            <label>Course Title</label>
+            <input type="text" id="editCourseTitle" placeholder="Course Title" required>
+            <label>Description</label>
+            <textarea id="editCourseDesc" rows="4" placeholder="Description"></textarea>
+            <label>Price</label>
+            <input type="number" id="editCoursePrice" placeholder="Price">
+            <label>Status</label>
+            <select id="editCourseActive">
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
+            <button onclick="submitCourseEdit()" class="btn-primary">Update Course</button>
+        </div>
+    </div>
+
+    <!-- Edit Module Modal -->
+    <div id="editModuleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editModuleModal')">&times;</span>
+            <h3>Rename Module</h3>
+            <input type="hidden" id="editModuleId">
+            <input type="text" id="editModuleTitle" placeholder="Module Title" required>
+            <button onclick="submitModuleEdit()" class="btn-primary">Update</button>
+        </div>
+    </div>
+
+    <!-- Edit Video Modal -->
+    <div id="editVideoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editVideoModal')">&times;</span>
+            <h3>Edit Video</h3>
+            <input type="hidden" id="editVideoId">
+            <label>Video Title</label>
+            <input type="text" id="editVideoTitle" placeholder="Video Title" required>
+            <label>Replace Video File (Optional)</label>
+            <input type="file" id="editVideoFile" accept="video/*">
+            <small style="color: var(--text-muted);">Leave empty to keep current video</small>
+            <button onclick="submitVideoEdit()" class="btn-primary">Update Video</button>
+        </div>
+    </div>
+
+    <!-- Add Module Modal -->
+    <div id="moduleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('moduleModal')">&times;</span>
+            <h3>Add Module</h3>
+            <input type="text" id="moduleTitle" placeholder="Module Title" required>
+            <button onclick="submitModule()" class="btn-primary">Add</button>
+        </div>
+    </div>
+
+    <!-- Add Video Modal -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('videoModal')">&times;</span>
+            <h3>Add Video</h3>
+            <input type="hidden" id="currentModuleId">
+            <input type="text" id="videoTitle" placeholder="Video Title" required>
+            <input type="file" id="videoFile" accept="video/*" required>
+            <button onclick="submitVideo()" class="btn-primary">Upload</button>
+            <p id="uploadStatus"></p>
+        </div>
+    </div>
+
+    <!-- Add Assignment Modal -->
+    <div id="assignmentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('assignmentModal')">&times;</span>
+            <h3>Add Assignment</h3>
+            <input type="hidden" id="assignModuleId">
+            <input type="text" id="assignTitle" placeholder="Title" required>
+
+            <label>Type</label>
+            <select id="assignType" onchange="toggleAssignmentFields()">
+                <option value="TEXT">Text Only</option>
+                <option value="FILE">File Upload</option>
+            </select>
+
+            <div id="textAssignmentFields">
+                <label>Description</label>
+                <textarea id="assignDesc" placeholder="Assignment Description"></textarea>
+
+                <label>Content / Question</label>
+                <textarea id="assignTextContent" placeholder="Enter assignment question or detailed content here..."
+                    rows="5"></textarea>
+            </div>
+
+            <div id="fileAssignmentFields" style="display: none;">
+                <label>Upload File</label>
+                <input type="file" id="assignFile" accept="*/*">
+                <small style="color: var(--text-muted);">Upload assignment file (PDF, DOC, etc.)</small>
+            </div>
+
+            <button onclick="submitAssignment()" class="btn-primary">Add Assignment</button>
+        </div>
+    </div>
+
+    <!-- View Assignment Modal -->
+    <div id="viewAssignmentModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <span class="close" onclick="closeModal('viewAssignmentModal')">&times;</span>
+            <h3 id="viewAssignTitle">Assignment</h3>
+            <div id="viewAssignType" style="margin:8px 0; color:#64748b;"></div>
+            <div id="viewAssignDesc" style="margin:8px 0;"></div>
+            <div id="viewAssignText"
+                style="white-space:pre-wrap; border:1px solid #e2e8f0; padding:12px; border-radius:8px;"></div>
+            <div id="viewAssignFile" style="margin-top:12px;"></div>
+        </div>
+    </div>
+
+    <!-- Edit Assignment Modal -->
+    <div id="editAssignmentModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <span class="close" onclick="closeModal('editAssignmentModal')">&times;</span>
+            <h3>Edit Assignment</h3>
+            <input type="hidden" id="editAssignId">
+            <label>Title</label>
+            <input type="text" id="editAssignTitle" placeholder="Title">
+            <label>Description</label>
+            <textarea id="editAssignDesc" rows="3" placeholder="Description"></textarea>
+            <div id="editAssignTextFields">
+                <label>Content</label>
+                <textarea id="editAssignTextContent" rows="5" placeholder="Enter content"></textarea>
+            </div>
+            <div id="editAssignFileField" style="display:none;">
+                <label>Replace File</label>
+                <input type="file" id="editAssignFile" accept="*/*">
+            </div>
+            <button onclick="submitAssignmentEdit()" class="btn-primary">Update Assignment</button>
+        </div>
+    </div>
+
+    <!-- Add Exam Modal -->
+    <div id="examModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close" onclick="closeModal('examModal')">&times;</span>
+            <h3>Exam Builder</h3>
+            <input type="hidden" id="examModuleId">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Exam Title</label>
+                    <input type="text" id="examTitle" placeholder="e.g. Final Certification Exam" required>
+                </div>
+            </div>
+            <div class="form-row" style="display: flex; gap: 20px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Duration (Minutes)</label>
+                    <input type="number" id="examDuration" value="60" required>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Passing Marks</label>
+                    <input type="number" id="examPassingMarks" value="40" required>
+                </div>
+            </div>
+
+            <div class="questions-section" style="margin-top: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h4>Questions</h4>
+                    <div>
+                        <button type="button" class="btn-icon" onclick="addQuestionRow('MCQ')">
+                            <i class="fas fa-plus"></i> MCQ
+                        </button>
+                        <button type="button" class="btn-icon" onclick="addQuestionRow('FILE_UPLOAD')">
+                            <i class="fas fa-plus"></i> File Upload
+                        </button>
+                    </div>
+                </div>
+                <div id="questionsContainer">
+                    <!-- Dynamic question rows here -->
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; text-align: right;">
+                <button onclick="submitExam()" class="btn-primary" style="padding: 12px 30px;">Create Exam</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Exam Modal -->
+    <div id="viewExamModal" class="modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <span class="close" onclick="closeModal('viewExamModal')">&times;</span>
+            <h3 id="viewExamTitle">Exam</h3>
+            <div id="viewExamMeta" style="margin:8px 0; color:#64748b;"></div>
+            <div id="viewExamQuestions"></div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('deleteModal')">&times;</span>
+            <h3>Confirm Delete</h3>
+            <p id="deleteMessage">Are you sure you want to delete this item?</p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button onclick="confirmDelete()" class="btn-danger">Delete</button>
+                <button onclick="closeModal('deleteModal')" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/shared.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        // Init course detail page logic
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get('id');
+        if (courseId) loadCourseDetails(courseId);
+    </script>
+</body>
+
+</html>

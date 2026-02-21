@@ -1,0 +1,343 @@
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    --bg-gradient: radial-gradient(circle at top right, #eff6ff, #f8fafc);
+    --accent-glow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+.student-body {
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Background Decorations */
+.student-body::before,
+.student-body::after {
+    content: '';
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    filter: blur(80px);
+    opacity: 0.1;
+    z-index: -1;
+    animation: float 20s infinite alternate ease-in-out;
+}
+
+.student-body::before {
+    top: -100px;
+    right: -100px;
+}
+
+.student-body::after {
+    bottom: -100px;
+    left: -100px;
+    animation-delay: -10s;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    100% {
+        transform: translate(40px, 40px) scale(1.1);
+    }
+}
+
+.profile-container {
+    max-width: 1100px;
+    margin: 60px auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+}
+
+.profile-header {
+    margin-bottom: 48px;
+    text-align: center;
+}
+
+.profile-header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+}
+
+.profile-header p {
+    color: #64748b;
+    font-size: 18px;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.profile-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: var(--accent-glow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.15);
+}
+
+/* Photo Card */
+.photo-card {
+    text-align: center;
+    position: sticky;
+    top: 100px;
+}
+
+.photo-display {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 28px;
+}
+
+.photo-display img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 6px solid white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn-photo-edit {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 44px;
+    height: 44px;
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-photo-edit:hover {
+    transform: scale(1.15) rotate(15deg);
+}
+
+.photo-card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+.photo-card p {
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* Details Card */
+.details-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.details-card h3 i {
+    color: #3b82f6;
+}
+
+.input-group {
+    margin-bottom: 24px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #475569;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 16px;
+    color: #94a3b8;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 14px 14px 14px 48px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 2px solid transparent;
+    border-radius: 14px;
+    font-size: 15px;
+    font-family: inherit;
+    color: #1e293b;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    outline: none;
+    background: white;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.input-group input:focus+i,
+.input-wrapper:focus-within i {
+    color: #3b82f6;
+}
+
+.input-group textarea {
+    height: 100px;
+    padding-left: 16px;
+    /* Textareas don't usually have icons inside */
+    resize: none;
+}
+
+.btn-save {
+    width: 100%;
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.2);
+    transition: all 0.3s ease;
+    margin-top: 12px;
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(37, 99, 235, 0.3);
+}
+
+.divider {
+    border: none;
+    border-top: 2px dashed rgba(0, 0, 0, 0.05);
+    margin: 40px 0;
+}
+
+.section-hint {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 20px;
+    background: #eff6ff;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border-left: 4px solid #3b82f6;
+}
+
+.phone-update-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.btn-secondary {
+    padding: 14px 24px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: #475569;
+    border-radius: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+    background: #eff6ff;
+}
+
+.otp-verification {
+    margin-top: 32px;
+    padding: 24px;
+    background: rgba(59, 130, 246, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    border-radius: 16px;
+    animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn-primary {
+    width: 100%;
+    background: #0f172a;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .photo-card {
+        position: static;
+    }
+
+    .profile-header h1 {
+        font-size: 30px;
+    }
+}

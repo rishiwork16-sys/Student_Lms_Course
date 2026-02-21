@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>skilledUp - Learn Industry-Focused Skills Online</title>
+    <link rel="stylesheet" href="../css/student.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="home-page">
+    <!-- Navigation -->
+    <nav class="main-navbar">
+        <div class="container navbar-content">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>skilledUp</span>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links" id="homeNavLinks">
+                <a href="#courses">Courses</a>
+                <a href="#reviews">Reviews</a>
+                <a href="#" class="search-icon"><i class="fas fa-search"></i> Search</a>
+                <a href="index.html" class="btn-login">Log in <i class="fas fa-user"></i></a>
+                <a href="index.html" class="btn-get-started">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container hero-content">
+            <div class="hero-text" style="max-width: 800px; margin: 0 auto;">
+                <h1>Master New Skills<br> <span style="color: #3b82f6;">Advance Your Career</span></h1>
+                <p>Unlock your potential with expert-led courses in coding, design, and business.</p>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="What do you want to learn today?"
+                        onkeyup="filterCourses()">
+                    <button class="btn-search" style="display:none;">Search</button>
+                    <!-- Hidden button, input handles it or make it absolute -->
+                </div>
+            </div>
+            <!-- Illustration removed for cleaner SaaS look -->
+        </div>
+    </section>
+
+    <!-- Course Filters -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterByType('all')">All</button>
+                <button class="filter-tab" onclick="filterByType('online')">Online</button>
+                <button class="filter-tab" onclick="filterByType('offline')">Offline</button>
+                <button class="filter-tab" onclick="filterByType('recorded')">Pre-Recorded</button>
+                <button class="filter-tab">More</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Courses Section -->
+    <section class="courses-section" id="courses">
+        <div class="container">
+            <div class="section-header">
+                <h2>Popular Courses</h2>
+                <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="filter-pills">
+                <button class="pill-btn active" onclick="filterByType('all')">All</button>
+                <button class="pill-btn" onclick="filterByType('online')">Online</button>
+                <button class="pill-btn offline-pill"><i class="fas fa-circle"></i> Offline</button>
+                <button class="pill-btn dropdown-pill">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <button class="pill-btn" onclick="filterByType('recorded')">Pre-Recorded</button>
+                <button class="pill-btn">More</button>
+            </div>
+            <div class="courses-grid" id="allCoursesGrid">
+                <!-- Courses will be loaded here -->
+                <div class="loading-msg">Loading courses...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Free Courses Section -->
+    <section class="free-courses-section" id="free-courses">
+        <div class="container">
+            <div class="section-header">
+                <h2>Free Courses</h2>
+                <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="courses-grid" id="freeCoursesGrid">
+                <!-- Free courses will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container footer-content">
+            <div class="footer-links">
+                <a href="#courses">Courses</a>
+                <a href="#reviews">Reviews</a>
+                <a href="#contact">Contact</a>
+                <a href="#privacy">Privacy Policy</a>
+                <a href="#terms">Terms of Service</a>
+            </div>
+            <div class="footer-social">
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; 2024 skilledUp. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../js/shared.js"></script>
+    <script src="../js/student.js"></script>
+    <script>
+        // Load all courses on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadAllCoursesForHome();
+        });
+    </script>
+</body>
+
+</html>

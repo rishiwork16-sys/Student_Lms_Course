@@ -1,0 +1,176 @@
+/* Course Grid */
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.course-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+}
+
+.course-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.course-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.course-card .info {
+    padding: 20px;
+}
+
+.course-card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0 0 8px 0;
+}
+
+.course-card p {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 8px 0;
+}
+
+.course-card small {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+/* Content Manager */
+.content-manager {
+    margin-top: 20px;
+}
+
+.module-item {
+    background: white;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.module-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+.module-header h3 {
+    color: var(--text-dark);
+    font-size: 18px;
+}
+
+.video-item,
+.assign-item {
+    background: #f8fafc;
+    padding: 12px 16px;
+    margin: 8px 0;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-dark);
+}
+
+.video-item i,
+.assign-item i {
+    margin-right: 8px;
+    color: var(--primary);
+}
+
+.module-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.item-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Video Player Modal */
+.video-player-modal {
+    width: 800px;
+    max-width: 95%;
+}
+
+.video-player-modal h3 {
+    margin-bottom: 16px;
+    color: var(--text-dark);
+}
+
+.video-player-modal video {
+    border-radius: 8px;
+    background: #000;
+}
+
+.video-player-modal .controls-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0 0 0;
+}
+
+.controls-bar .controls-left,
+.controls-bar .controls-right,
+.controls-bar .controls-center {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.controls-bar button {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.controls-bar button:hover {
+    background: #f1f5f9;
+}
+
+.controls-bar input[type="range"] {
+    width: 120px;
+}
+
+.controls-bar select {
+    padding: 6px 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--card-bg);
+}
+
+/* Create Course Modal */
+#createModal .modal-content {
+    max-width: 800px !important;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}

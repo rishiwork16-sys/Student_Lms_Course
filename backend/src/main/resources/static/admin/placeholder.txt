@@ -1,0 +1,1 @@
+/* If needed, can add placeholder image logic here or rely on external placeholders */

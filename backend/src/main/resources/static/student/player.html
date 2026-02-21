@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Player - Final LMS</title>
+    <!-- Modern Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/student.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="player-body">
+    <div class="player-layout">
+        <!-- Sidebar Toggle Button -->
+        <button id="sidebarToggleBtn" class="btn-sidebar-toggle" title="Toggle Sidebar">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <!-- SIDEBAR -->
+        <aside class="player-sidebar">
+            <div class="sidebar-header">
+                <button onclick="window.location.href='dashboard.html'" class="btn-back-player">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </button>
+                <div class="course-info">
+                    <h2 id="courseTitle">Loading Course...</h2>
+                    <div class="progress-container">
+                        <div class="progress-bar-bg">
+                            <div id="courseProgressBar" class="progress-bar-fill"></div>
+                        </div>
+                        <span id="courseProgressText">0% Complete</span>
+                    </div>
+                    <button id="downloadCertBtn" class="btn-nav primary hidden"
+                        style="width: 100%; margin-top: 16px; justify-content: center;">
+                        <i class="fas fa-certificate"></i> Download Certificate
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-content custom-scrollbar" id="moduleList">
+                <!-- Modules injected here -->
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="player-main custom-scrollbar">
+            <!-- EMPTY STATE -->
+            <div id="emptyState" class="empty-state">
+                <div class="empty-icon"><i class="fas fa-play"></i></div>
+                <h2>Ready to Start?</h2>
+                <p>Select a lesson from the sidebar to begin.</p>
+            </div>
+
+            <!-- LEARNING VIEW -->
+            <div id="learningContainer" class="learning-container hidden">
+                <!-- VIDEO SECTION -->
+                <div class="video-section">
+                    <!-- Video Title Area (Airy & Above) -->
+                    <div class="video-overlay-header">
+                        <h1 id="videoTitle">Lesson Title</h1>
+                        <span id="videoDuration" class="duration-badge"><i class="far fa-clock"></i> --:--</span>
+                    </div>
+
+                    <div class="video-wrapper">
+                        <video id="mainPlayer" class="html5-player" controls controlsList="nodownload">
+                            <source src="" type="video/mp4">
+                            Your browser does not support HTML5 video.
+                        </video>
+                    </div>
+
+                    <div class="video-controls-bar">
+                        <div class="controls-group">
+                            <div class="control-item">
+                                <label>Speed</label>
+                                <select id="speedSelect">
+                                    <option value="0.5">0.5x</option>
+                                    <option value="0.75">0.75x</option>
+                                    <option value="1" selected>1x</option>
+                                    <option value="1.25">1.25x</option>
+                                    <option value="1.5">1.5x</option>
+                                    <option value="2">2x</option>
+                                </select>
+                            </div>
+                            <div class="control-item">
+                                <label>Quality</label>
+                                <select id="qualitySelect">
+                                    <option value="144p">144p</option>
+                                    <option value="240p">240p</option>
+                                    <option value="360p">360p</option>
+                                    <option value="480p" selected>480p</option>
+                                    <option value="720p">720p</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="controls-group">
+                            <button id="prevBtn" class="btn-nav">Prev</button>
+                            <button id="nextBtn2" onclick="playNext()" class="btn-nav primary">Next <i
+                                    class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODULE ACTIVITIES (Below Video) -->
+                <div class="activities-section">
+                    <h3 class="section-title"><i class="fas fa-layer-group"></i> Module Activities</h3>
+                    <div id="moduleActivities" class="activities-grid">
+                        <!-- Assignments/Quizzes injected here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- FULL ACTIVITY VIEW (Assignments/Quizzes full screen) -->
+            <div id="assignmentFullView" class="hidden activity-view">
+                <div class="activity-header">
+                    <button onclick="closeAssignmentView()" class="btn-back-activity">
+                        <i class="fas fa-arrow-left"></i> Back to Lesson
+                    </button>
+                    <h2 id="activityTitle">Activity</h2>
+                </div>
+                <div id="assignmentContentArea" class="activity-content-card">
+                    <!-- Dynamic Content -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Hidden placeholders to maintain ID compatibility if needed or just for structure -->
+    <div id="placeholderMsg" style="display:none;"></div>
+    <div id="assignmentSection" style="display:none;"></div>
+
+    <script src="../js/shared.js"></script>
+    <script src="../js/student.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get('id');
+        // Simple shim to close activity view
+        window.closeAssignmentView = function () {
+            document.getElementById('assignmentFullView').classList.add('hidden');
+            document.getElementById('learningContainer').classList.remove('hidden');
+            // If video was playing, maybe resume?
+            const v = document.getElementById('mainPlayer');
+            if (v && v.paused && v.currentTime > 0) v.play().catch(e => { });
+        }
+        if (courseId) loadPlayer(courseId);
+    </script>
+</body>
+
+</html>

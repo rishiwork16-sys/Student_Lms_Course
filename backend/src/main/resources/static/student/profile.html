@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - LMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/common/global.css">
+    <link rel="stylesheet" href="../css/student/layout.css">
+    <link rel="stylesheet" href="../css/student/profile.css">
+    <link rel="stylesheet" href="../css/student/responsive.css">
+</head>
+
+<body class="student-body">
+    <!-- NAVBAR (Reusable) -->
+    <nav class="navbar">
+        <a href="dashboard.html" class="logo"
+            style="text-decoration: none; color: #0f172a; display: flex; align-items: center; gap: 10px; font-weight: 800;">
+            <i class="fas fa-graduation-cap" style="color: #3b82f6;"></i>
+            <span>skilledUp</span>
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="profile.html" class="active">Profile</a>
+            <button onclick="logout()" class="btn-logout-icon"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+    </nav>
+
+    <main class="profile-container">
+        <header class="profile-header">
+            <h1>Account Settings</h1>
+            <p>Refine your digital presence and account security</p>
+        </header>
+
+        <div class="profile-grid">
+            <!-- Left: Profile Photo Card -->
+            <section class="profile-card photo-card">
+                <div class="photo-display">
+                    <img id="profileImage" src="../assets/default-avatar.png" alt="Profile">
+                    <label for="photoUpload" class="btn-photo-edit">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                    <input type="file" id="photoUpload" hidden accept="image/*">
+                </div>
+                <h3 id="displayName">Student Name</h3>
+                <p id="displayEmail">student@example.com</p>
+            </section>
+
+            <!-- Right: Details Form -->
+            <section class="profile-card details-card">
+                <form id="profileForm">
+                    <div class="form-section">
+                        <h3><i class="fas fa-user-edit"></i> Personal Details</h3>
+                        <div class="input-group">
+                            <label>Full Name</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-id-card"></i>
+                                <input type="text" id="profileName" required placeholder="Your full name">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="profileEmail" required placeholder="your.email@example.com">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Residential Address</label>
+                            <div class="input-wrapper" style="display: block;">
+                                <textarea id="profileAddress" placeholder="Your address here..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-save">Update Profile</button>
+                </form>
+
+                <hr class="divider">
+
+                <div class="form-section">
+                    <h3><i class="fas fa-shield-alt"></i> Phone Verification</h3>
+                    <p class="section-hint">Secure your account by keeping your contact number verified.</p>
+                    <div class="phone-update-row">
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <label>Phone Number</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-phone"></i>
+                                <input type="text" id="profilePhone" placeholder="10-digit number">
+                            </div>
+                        </div>
+                        <button id="btnRequestOtp" class="btn-secondary">Get OTP</button>
+                    </div>
+
+                    <!-- OTP Modal-like section -->
+                    <div id="otpSection" class="otp-verification hidden">
+                        <div class="input-group">
+                            <label>Verification Code</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-key"></i>
+                                <input type="text" id="phoneOtp" maxlength="6" placeholder="Enter 6-digit OTP">
+                            </div>
+                        </div>
+                        <button id="btnVerifyOtp" class="btn-primary">Verify & Confirm</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="../js/shared.js"></script>
+    <script src="../js/student.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStudentProfile();
+        });
+    </script>
+</body>
+
+</html>
