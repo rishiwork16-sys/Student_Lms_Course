@@ -144,15 +144,7 @@ public class S3Service {
             return "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80";
         }
 
-        // LOCAL FILE: check if it exists in our uploads directory (highest priority)
-        if (uploadDir != null) {
-            Path filePath = uploadDir.resolve(fileName);
-            if (Files.exists(filePath)) {
-                return "/uploads/" + fileName;
-            }
-        }
-
-        // S3: If s3 is available, generate a presigned URL
+        // 1. S3 Priority: If s3 is available, generate a presigned URL
         if (s3Available && s3Client != null) {
             try {
                 Date expiration = new Date();
@@ -166,7 +158,16 @@ public class S3Service {
             }
         }
 
-        // Fallback placeholder
+        // 2. LOCAL FILE Fallback: check if it exists (use full URL so remote frontend
+        // can access it)
+        if (uploadDir != null) {
+            Path filePath = uploadDir.resolve(fileName);
+            if (Files.exists(filePath)) {
+                return "https://lmsapi.skilledup.tech/uploads/" + fileName;
+            }
+        }
+
+        // 3. Fallback placeholders
         String lower = fileName.toLowerCase();
         if (lower.endsWith(".mp4") || lower.endsWith(".mov") || lower.endsWith(".mkv") || lower.endsWith(".webm")) {
             return "https://www.w3schools.com/html/mov_bbb.mp4";
