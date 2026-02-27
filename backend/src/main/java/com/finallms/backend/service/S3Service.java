@@ -111,26 +111,32 @@ public class S3Service {
 
         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
-        // ALWAYS save locally first (so we can serve even if S3 fails)
+        // ALWAYS save locally first
         if (!Files.exists(uploadDir)) {
             Files.createDirectories(uploadDir);
         }
         Path localFilePath = uploadDir.resolve(fileName);
-        // Read bytes in case stream needs to be reused for S3
-        byte[] fileBytes = file.getBytes();
-        Files.write(localFilePath, fileBytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+        // Use copy instead of getBytes for efficiency
+        try (java.io.InputStream is = file.getInputStream()) {
+            Files.copy(is, localFilePath, StandardCopyOption.REPLACE_EXISTING);
+        }
         System.out.println("[S3Service] Saved locally: " + localFilePath);
 
         // Also attempt S3 upload if available
         if (s3Available) {
             try {
                 ObjectMetadata metadata = new ObjectMetadata();
-                metadata.setContentLength(fileBytes.length);
+                metadata.setContentLength(file.getSize());
                 metadata.setContentType(file.getContentType());
-                s3Client.putObject(new PutObjectRequest(
-                        bucketName, fileName,
-                        new java.io.ByteArrayInputStream(fileBytes), metadata));
-                System.out.println("[S3Service] Also uploaded to S3: " + fileName);
+
+                // Re-open stream for S3
+                try (java.io.InputStream s3Is = file.getInputStream()) {
+                    s3Client.putObject(new PutObjectRequest(
+                            bucketName, fileName,
+                            s3Is, metadata));
+                    System.out.println("[S3Service] Also uploaded to S3: " + fileName);
+                }
             } catch (Exception e) {
                 System.out.println("[S3Service] S3 upload failed: " + e.getMessage() + " — will serve from local.");
             }
