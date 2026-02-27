@@ -111,13 +111,12 @@ public class S3Service {
 
         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
-        // ALWAYS save locally first
+        // ALWAYS save locally first (as temporary storage)
         if (!Files.exists(uploadDir)) {
             Files.createDirectories(uploadDir);
         }
         Path localFilePath = uploadDir.resolve(fileName);
 
-        // Use copy instead of getBytes for efficiency
         try (java.io.InputStream is = file.getInputStream()) {
             Files.copy(is, localFilePath, StandardCopyOption.REPLACE_EXISTING);
         }
@@ -132,13 +131,20 @@ public class S3Service {
 
                 // Re-open stream for S3
                 try (java.io.InputStream s3Is = file.getInputStream()) {
-                    s3Client.putObject(new PutObjectRequest(
-                            bucketName, fileName,
-                            s3Is, metadata));
+                    s3Client.putObject(new PutObjectRequest(bucketName, fileName, s3Is, metadata));
                     System.out.println("[S3Service] Also uploaded to S3: " + fileName);
+
+                    // SUCCESS! Delete local file to save space
+                    try {
+                        Files.deleteIfExists(localFilePath);
+                        System.out.println("[S3Service] Deleted local copy after S3 upload to save disk space.");
+                    } catch (IOException e) {
+                        System.out.println("[S3Service] Failed to delete local copy: " + e.getMessage());
+                    }
                 }
             } catch (Exception e) {
-                System.out.println("[S3Service] S3 upload failed: " + e.getMessage() + " — will serve from local.");
+                System.out.println(
+                        "[S3Service] S3 upload failed: " + e.getMessage() + " — will keep local copy for serving.");
             }
         }
 
